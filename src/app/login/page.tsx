@@ -27,8 +27,6 @@ import { EyeIcon, EyeOffIcon } from 'lucide-react'
 import Link from 'next/link'
 import { toast } from 'sonner'
 
-export const dynamic = 'force-dynamic'
-
 function generateToast(
   description: string,
   type: 'error' | 'success' = 'error'
