@@ -13,37 +13,16 @@ import { Edit2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { useAuth } from '@/hooks/use-auth'
 import { updatePlanPrice } from '@/lib/supabase/plans'
-import { PlanProduct } from './types'
+import { PlanPrice } from '@/types'
+import { capitalize } from '@/lib/utils'
 
-export const PlanProducts = ({
-  plans
-}: {
-  plans: { plan: Plan; price: number }[]
-}) => {
+export const PlanProducts = ({ plans }: { plans: PlanPrice[] }) => {
   const { user } = useAuth()
-  const products: PlanProduct[] = [
-    {
-      plan: Plan.BASIC,
-      price: plans.find((p) => p.plan === Plan.BASIC)?.price || 9.99,
-      name: 'Basic'
-    },
-    {
-      plan: Plan.PREMIUM,
-      price: plans.find((p) => p.plan === Plan.PREMIUM)?.price || 29.99,
-      name: 'Premium'
-    },
-    {
-      plan: Plan.ENTERPRISE,
-      price: plans.find((p) => p.plan === Plan.ENTERPRISE)?.price || 99.99,
-      name: 'Enterprise'
-    }
-  ]
-
   const [editingId, setEditingId] = useState<Plan | null>(null)
   const [editPrice, setEditPrice] = useState<number>(0)
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleEdit = (product: PlanProduct) => {
+  const handleEdit = (product: PlanPrice) => {
     setEditingId(product.plan)
     setEditPrice(product.price)
   }
@@ -80,13 +59,15 @@ export const PlanProducts = ({
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        {products.map((product) => (
+        {plans.map((product) => (
           <Card key={product.plan} className="border border-muted">
             <CardContent>
               {editingId === product.plan ? (
                 <div className="space-y-4">
                   <div className="flex items-center space-x-2">
-                    <h3 className="font-semibold text-lg">{product.name}</h3>
+                    <h3 className="font-semibold text-lg">
+                      {capitalize(product.plan)}
+                    </h3>
                     <div className="flex-1">
                       <Input
                         type="number"
@@ -117,7 +98,9 @@ export const PlanProducts = ({
               ) : (
                 <div className="flex justify-between">
                   <div>
-                    <h3 className="font-semibold text-lg">{product.name}</h3>
+                    <h3 className="font-semibold text-lg">
+                      {capitalize(product.plan)}
+                    </h3>
                     <div className="text-xl font-bold">
                       ${product.price.toFixed(2)}/month
                     </div>

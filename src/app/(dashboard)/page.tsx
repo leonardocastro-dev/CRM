@@ -1,13 +1,21 @@
 'use client'
 
+import { Plan } from '@/enums'
 import { MainStats } from '@/app/(dashboard)/components/main-stats'
 import { PlanDistribution } from '@/app/(dashboard)/components/plan-distribution'
 import { AdditionalMetrics } from '@/app/(dashboard)/components/additional-metrics'
 import LoadingOverview from './components/loading-overview'
 import { useData } from './store'
 import { PlanProducts } from '@/app/(dashboard)/components/plan-products'
+import { PlanPrice } from '@/types'
+
 export default function Home() {
   const { clients, plans, loading } = useData()
+
+  const planOrder = [Plan.BASIC, Plan.PREMIUM, Plan.ENTERPRISE]
+  const paidPlans = planOrder
+    .map((planType) => plans.find((p) => p.plan === planType))
+    .filter((plan): plan is PlanPrice => plan !== undefined)
 
   return (
     <div className="space-y-6">
@@ -22,7 +30,7 @@ export default function Home() {
           <MainStats clients={clients} plans={plans} />
           <PlanDistribution clients={clients} />
           <AdditionalMetrics clients={clients} />
-          <PlanProducts plans={plans} />
+          <PlanProducts plans={paidPlans} />
         </>
       )}
     </div>
