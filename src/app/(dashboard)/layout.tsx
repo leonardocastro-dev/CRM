@@ -1,20 +1,20 @@
-'use client';
+'use client'
 
-import { useIsMobile } from "@/hooks/use-mobile";
-import { SidebarNav } from "@/components/layout/sidebar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { ReactNode, useEffect } from "react";
-import { useData } from "./store";
+import { useIsMobile } from '@/hooks/use-mobile'
+import { SidebarNav } from '@/components/layout/sidebar'
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import { ReactNode, useEffect } from 'react'
+import { useData } from './store'
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
-  const isMobile = useIsMobile();
-  const { fetchData, clients, plans } = useData();
+  const isMobile = useIsMobile()
+  const { fetchData, initClientsRealtime, initPlansRealtime } = useData()
 
   useEffect(() => {
-    if (clients.length === 0 || plans.length === 0) {
-      fetchData();
-    }
-  }, [fetchData, clients.length, plans.length]);
+    fetchData()
+    initClientsRealtime()
+    initPlansRealtime()
+  }, [fetchData, initClientsRealtime, initPlansRealtime])
 
   return (
     <SidebarProvider>
@@ -29,5 +29,5 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         </main>
       </div>
     </SidebarProvider>
-  );
+  )
 }

@@ -1,8 +1,8 @@
-import { LucideIcon } from "lucide-react";
+import { LucideIcon } from 'lucide-react'
 
 export interface StatCardProps {
-  title: string;
-  value: string | number;
-  description: string;
-  icon: LucideIcon;
+  title: string
+  value: string | number
+  description: string
+  icon: LucideIcon
 }

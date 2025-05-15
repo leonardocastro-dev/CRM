@@ -1,19 +1,19 @@
-import { Client } from "@/types";
+import { Client } from '@/types'
 
 interface BaseDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  open: boolean
+  onOpenChange: (open: boolean) => void
 }
 
 export interface ClientFormProps extends BaseDialogProps {
-  mode: "add" | "edit";
-  client?: Client;
+  mode: 'add' | 'edit'
+  client?: Client
 }
 
 export interface DeleteClientDialogProps extends BaseDialogProps {
-  clientId: string;
+  clientId: string
 }
 
 export interface ViewClientDialogProps extends BaseDialogProps {
-  client?: Client;
+  client?: Client
 }

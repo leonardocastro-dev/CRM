@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -7,43 +7,43 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { getClientById, deleteClient } from "@/lib/supabase/clients";
-import { Client } from "@/types";
-import { toast } from "sonner";
-import { DeleteClientDialogProps } from "../types";
+  AlertDialogTitle
+} from '@/components/ui/alert-dialog'
+import { getClientById, deleteClient } from '@/lib/supabase/clients'
+import { Client } from '@/types'
+import { toast } from 'sonner'
+import { DeleteClientDialogProps } from '../types'
 
 export function DeleteClientDialog({
   open,
   onOpenChange,
-  clientId,
+  clientId
 }: DeleteClientDialogProps) {
-  const [client, setClient] = useState<Client | null>(null);
+  const [client, setClient] = useState<Client | null>(null)
 
   useEffect(() => {
     async function fetchClient() {
       if (clientId) {
-        const foundClient = await getClientById(clientId);
+        const foundClient = await getClientById(clientId)
         if (foundClient) {
-          setClient(foundClient);
+          setClient(foundClient)
         }
       }
     }
 
-    fetchClient();
-  }, [clientId]);
+    fetchClient()
+  }, [clientId])
 
   const handleDelete = async () => {
     try {
-      await deleteClient(clientId);
-      toast.success("Client deleted successfully!");
-      onOpenChange(false);
+      await deleteClient(clientId)
+      toast.success('Client deleted successfully!')
+      onOpenChange(false)
     } catch (error) {
-      console.error("Error deleting client:", error);
-      toast.error("Error deleting client");
+      console.error('Error deleting client:', error)
+      toast.error('Error deleting client')
     }
-  };
+  }
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
@@ -51,7 +51,7 @@ export function DeleteClientDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>Confirm Delete</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete the client{" "}
+            Are you sure you want to delete the client{' '}
             <strong>{client?.name}</strong>? This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
@@ -66,5 +66,5 @@ export function DeleteClientDialog({
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  );
+  )
 }

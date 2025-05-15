@@ -1,8 +1,12 @@
-import { supabase } from "@/lib/supabase/data";
-import { Client } from "@/types";
+import { supabase } from '@/lib/supabase/data'
+import { Client } from '@/types'
 
 export function listenToClientsChanges(
-  onChange: (payload: { type: string; new: Client | null; old: Client | null }) => void
+  onChange: (payload: {
+    type: string
+    new: Client | null
+    old: Client | null
+  }) => void
 ) {
   const channel = supabase
     .channel('clients-changes')
@@ -11,19 +15,19 @@ export function listenToClientsChanges(
       {
         event: '*',
         schema: 'public',
-        table: 'clients',
+        table: 'clients'
       },
       (payload) => {
         onChange({
           type: payload.eventType,
           new: payload.new as Client | null,
-          old: payload.old as Client | null,
-        });
+          old: payload.old as Client | null
+        })
       }
     )
-    .subscribe();
+    .subscribe()
 
-  return () => supabase.removeChannel(channel);
+  return () => supabase.removeChannel(channel)
 }
 
 export async function getClientById(id: string) {
@@ -31,22 +35,20 @@ export async function getClientById(id: string) {
     .from('clients')
     .select('*')
     .eq('id', id)
-    .single();
+    .single()
 
   if (error) {
-    throw error;
+    throw error
   }
 
-  return data;
+  return data
 }
 
 export async function addClient(client: Client) {
-  const { error } = await supabase
-    .from('clients')
-    .insert([client]);
+  const { error } = await supabase.from('clients').insert([client])
 
   if (error) {
-    throw error;
+    throw error
   }
 }
 
@@ -57,22 +59,19 @@ export async function updateClient(client: Client) {
       name: client.name,
       email: client.email,
       plan: client.plan,
-      status: client.status,
+      status: client.status
     })
-    .eq('id', client.id);
+    .eq('id', client.id)
 
   if (error) {
-    throw error;
+    throw error
   }
 }
 
 export async function deleteClient(id: string) {
-  const { error } = await supabase
-    .from('clients')
-    .delete()
-    .eq('id', id);
+  const { error } = await supabase.from('clients').delete().eq('id', id)
 
   if (error) {
-    throw error;
+    throw error
   }
 }

@@ -1,34 +1,37 @@
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from '@/hooks/use-auth'
 import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+  DialogTitle
+} from '@/components/ui/dialog'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Edit } from "lucide-react";
-import { ClientForm } from "./client-form";
-import { renderPlanBadge, renderStatusBadge } from "../templates/badge-templates";
-import { ViewClientDialogProps } from "../types";
-import { formatDate } from "@/lib/utils";
-import useDialogStore from "../store";
+  CardTitle
+} from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Edit } from 'lucide-react'
+import { ClientForm } from './client-form'
+import {
+  renderPlanBadge,
+  renderStatusBadge
+} from '../templates/badge-templates'
+import { ViewClientDialogProps } from '../types'
+import { formatDate } from '@/lib/utils'
+import useDialogStore from '../store'
 
 export function ViewClientDialog({
   open,
   onOpenChange,
-  client,
+  client
 }: ViewClientDialogProps) {
-  const { user } = useAuth();
-  const { editDialogOpen, setEditDialogOpen } = useDialogStore();
+  const { user } = useAuth()
+  const { editDialogOpen, setEditDialogOpen } = useDialogStore()
 
-  if (!client) return null;
+  if (!client) return null
 
   return (
     <>
@@ -49,8 +52,8 @@ export function ViewClientDialog({
                     variant="outline"
                     size="icon"
                     onClick={() => {
-                      setEditDialogOpen(client.id);
-                      onOpenChange(false);
+                      setEditDialogOpen(client.id)
+                      onOpenChange(false)
                     }}
                   >
                     <Edit className="h-4 w-4" />
@@ -68,11 +71,15 @@ export function ViewClientDialog({
                     <dd>{renderPlanBadge(client.plan)}</dd>
                   </div>
                   <div className="flex justify-between items-center">
-                    <dt className="font-medium text-muted-foreground">Status:</dt>
+                    <dt className="font-medium text-muted-foreground">
+                      Status:
+                    </dt>
                     <dd>{renderStatusBadge(client.status)}</dd>
                   </div>
                   <div className="flex justify-between">
-                    <dt className="font-medium text-muted-foreground">Created:</dt>
+                    <dt className="font-medium text-muted-foreground">
+                      Created:
+                    </dt>
                     <dd>{formatDate(client.created_at)}</dd>
                   </div>
                 </dl>
@@ -86,9 +93,9 @@ export function ViewClientDialog({
         <ClientForm
           open={editDialogOpen !== null}
           onOpenChange={(open) => {
-            setEditDialogOpen(open ? client.id : null);
+            setEditDialogOpen(open ? client.id : null)
             if (!open) {
-              onOpenChange(true);
+              onOpenChange(true)
             }
           }}
           mode="edit"
@@ -96,5 +103,5 @@ export function ViewClientDialog({
         />
       )}
     </>
-  );
+  )
 }

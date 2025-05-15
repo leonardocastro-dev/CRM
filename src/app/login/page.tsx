@@ -1,89 +1,98 @@
-'use client';
+'use client'
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { supabase } from "@/lib/supabase/data";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { Button } from '@/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { supabase } from '@/lib/supabase/data'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { EyeIcon, EyeOffIcon } from "lucide-react";
-import Link from "next/link";
-import { toast } from "sonner";
+  FormMessage
+} from '@/components/ui/form'
+import { EyeIcon, EyeOffIcon } from 'lucide-react'
+import Link from 'next/link'
+import { toast } from 'sonner'
 
-function generateToast(description: string, type: 'error' | 'success' = 'error') {
+function generateToast(
+  description: string,
+  type: 'error' | 'success' = 'error'
+) {
   toast[type](description, {
     richColors: true,
-    closeButton: true,
-  });
+    closeButton: true
+  })
 }
 
 const formSchema = z.object({
-  email: z.string()
-    .min(1, "Email is required")
-    .email("Invalid email"),
-  password: z.string().min(1, "Password is required"),
-});
+  email: z.string().min(1, 'Email is required').email('Invalid email'),
+  password: z.string().min(1, 'Password is required')
+})
 
 export default function LoginPage() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const router = useRouter()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
+      email: '',
+      password: ''
+    }
+  })
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      setLoading(true);
+      setLoading(true)
       const { data, error } = await supabase.auth.signInWithPassword({
         email: values.email,
-        password: values.password,
-      });
+        password: values.password
+      })
 
       if (error) {
         switch (error.code) {
           case 'invalid_credentials':
-            generateToast("Invalid email or password.");
-            break;
+            generateToast('Invalid email or password.')
+            break
           case 'email_not_confirmed':
-            generateToast("Please confirm your email before logging in.");
-            break;
+            generateToast('Please confirm your email before logging in.')
+            break
           default:
-            generateToast("An error occurred while logging in. Please try again later.");
+            generateToast(
+              'An error occurred while logging in. Please try again later.'
+            )
         }
-        return;
+        return
       }
 
       if (data.user) {
-        generateToast("Login successful!", "success");
-        router.push("/");
-        router.refresh();
+        generateToast('Login successful!', 'success')
+        router.push('/')
+        router.refresh()
       }
     } catch (error) {
-      console.error(error);
-      generateToast("An unexpected error occurred. Please try again later.");
+      console.error(error)
+      generateToast('An unexpected error occurred. Please try again later.')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
-  const toggleShowPassword = () => setShowPassword(!showPassword);
+  const toggleShowPassword = () => setShowPassword(!showPassword)
 
   return (
     <div className="flex h-screen items-center justify-center">
@@ -119,7 +128,7 @@ export default function LoginPage() {
                     <div className="relative">
                       <FormControl>
                         <Input
-                          type={showPassword ? "text" : "password"}
+                          type={showPassword ? 'text' : 'password'}
                           placeholder="••••••"
                           {...field}
                         />
@@ -141,7 +150,7 @@ export default function LoginPage() {
                 )}
               />
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Entering..." : "Enter"}
+                {loading ? 'Entering...' : 'Enter'}
               </Button>
               <div className="text-center mt-4">
                 <Link
@@ -156,5 +165,5 @@ export default function LoginPage() {
         </CardContent>
       </Card>
     </div>
-  );
-};
+  )
+}

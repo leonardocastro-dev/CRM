@@ -10,20 +10,20 @@ import {
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuItem,
-  SidebarMenuButton,
-} from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
-import { Users, LogIn, LogOut, BarChart } from "lucide-react";
-import { routes } from "@/routes";
-import { useRouter, usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
-import { useAuth } from '@/hooks/use-auth';
-import { supabase } from '@/lib/supabase/data';
+  SidebarMenuButton
+} from '@/components/ui/sidebar'
+import { Button } from '@/components/ui/button'
+import { Users, LogIn, LogOut, BarChart } from 'lucide-react'
+import { routes } from '@/routes'
+import { useRouter, usePathname } from 'next/navigation'
+import { cn } from '@/lib/utils'
+import { useAuth } from '@/hooks/use-auth'
+import { supabase } from '@/lib/supabase/data'
 
 export function SidebarNav() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const { user } = useAuth();
+  const router = useRouter()
+  const pathname = usePathname()
+  const { user } = useAuth()
 
   return (
     <Sidebar>
@@ -45,7 +45,8 @@ export function SidebarNav() {
                   <SidebarMenuButton
                     onClick={() => router.push(route.path)}
                     className={cn({
-                      "bg-sidebar-accent text-sidebar-accent-foreground": pathname === route.path,
+                      'bg-sidebar-accent text-sidebar-accent-foreground':
+                        pathname === route.path
                     })}
                   >
                     {route.path === '/' ? (
@@ -64,31 +65,31 @@ export function SidebarNav() {
       <SidebarFooter>
         <div className="px-4 py-2">
           {user ? (
-              <div className="space-y-2">
-                <p className="text-xs text-muted-foreground">
-                  Logged in as: <span className="font-medium">{user.email}</span>
-                </p>
-                <Button
-                  onClick={() => supabase.auth.signOut()}
-                  variant="outline"
-                  className="w-full justify-start"
-                >
-                  <LogOut className="w-4 h-4 mr-2" />
-                  <span>Logout</span>
-                </Button>
-              </div>
-            ) : (
+            <div className="space-y-2">
+              <p className="text-xs text-muted-foreground">
+                Logged in as: <span className="font-medium">{user.email}</span>
+              </p>
               <Button
-                onClick={() => router.push("/login")}
+                onClick={() => supabase.auth.signOut()}
                 variant="outline"
                 className="w-full justify-start"
               >
-                <LogIn className="w-4 h-4 mr-2" />
-                <span>Login</span>
+                <LogOut className="w-4 h-4 mr-2" />
+                <span>Logout</span>
               </Button>
-            )}
+            </div>
+          ) : (
+            <Button
+              onClick={() => router.push('/login')}
+              variant="outline"
+              className="w-full justify-start"
+            >
+              <LogIn className="w-4 h-4 mr-2" />
+              <span>Login</span>
+            </Button>
+          )}
         </div>
       </SidebarFooter>
     </Sidebar>
-  );
+  )
 }

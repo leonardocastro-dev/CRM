@@ -1,32 +1,45 @@
-import { Client, Plan } from "@/types";
+import { Client } from '@/types'
+import { Plan } from '@/enums'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
-import { ChartContainer, ChartTooltipContent, ChartTooltip } from "@/components/ui/chart";
+  CardTitle
+} from '@/components/ui/card'
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts'
+import {
+  ChartContainer,
+  ChartTooltipContent,
+  ChartTooltip
+} from '@/components/ui/chart'
 
 export const PlanDistribution = ({ clients }: { clients: Client[] }) => {
-  const planCounts = clients.reduce((acc, client) => {
-    acc[client.plan] = (acc[client.plan] || 0) + 1;
-    return acc;
-  }, {} as Record<Plan, number>);
+  const planCounts = clients.reduce(
+    (acc, client) => {
+      acc[client.plan] = (acc[client.plan] || 0) + 1
+      return acc
+    },
+    {} as Record<Plan, number>
+  )
 
   const planData = Object.entries(planCounts).map(([plan, count]) => ({
     plan: formatPlanName(plan as Plan),
-    clients: count,
-  }));
+    clients: count
+  }))
 
   function formatPlanName(plan: Plan): string {
     switch (plan) {
-      case Plan.FREE: return "Free";
-      case Plan.BASIC: return "Basic";
-      case Plan.PREMIUM: return "Premium";
-      case Plan.ENTERPRISE: return "Enterprise";
-      default: return plan;
+      case Plan.FREE:
+        return 'Free'
+      case Plan.BASIC:
+        return 'Basic'
+      case Plan.PREMIUM:
+        return 'Premium'
+      case Plan.ENTERPRISE:
+        return 'Enterprise'
+      default:
+        return plan
     }
   }
 
@@ -42,7 +55,7 @@ export const PlanDistribution = ({ clients }: { clients: Client[] }) => {
         <ChartContainer
           className="w-full h-[160px]"
           config={{
-            clients: { label: "Clientes" },
+            clients: { label: 'Clients' }
           }}
         >
           <BarChart
@@ -58,20 +71,12 @@ export const PlanDistribution = ({ clients }: { clients: Client[] }) => {
               tickMargin={10}
               axisLine={false}
             />
-            <YAxis
-              tickLine={false}
-              axisLine={false}
-              tick={{ fontSize: 12 }}
-            />
+            <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 12 }} />
             <ChartTooltip content={<ChartTooltipContent />} />
-            <Bar
-              dataKey="clients"
-              fill="var(--primary)"
-              radius={4}
-            />
+            <Bar dataKey="clients" fill="var(--primary)" radius={4} />
           </BarChart>
         </ChartContainer>
       </CardContent>
     </Card>
-  );
-};
+  )
+}

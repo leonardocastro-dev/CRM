@@ -1,74 +1,91 @@
-import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Client, Plan, Status } from "@/types";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { toast } from "sonner";
-import { addClient, updateClient } from "@/lib/supabase/clients";
-import { ClientFormProps } from "../types";
+import { useState } from 'react'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Client } from '@/types'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select'
+import { toast } from 'sonner'
+import { addClient, updateClient } from '@/lib/supabase/clients'
+import { ClientFormProps } from '../types'
+import { Plan, Status } from '@/enums'
 
-export function ClientForm({ open, onOpenChange, mode, client: initialClient }: ClientFormProps) {
+export function ClientForm({
+  open,
+  onOpenChange,
+  mode,
+  client: initialClient
+}: ClientFormProps) {
   const [formData, setFormData] = useState<Partial<Client>>(
     initialClient || {
-      name: "",
-      email: "",
+      name: '',
+      email: '',
       plan: Plan.FREE,
-      status: Status.PENDING,
+      status: Status.PENDING
     }
-  );
+  )
 
   const handleChange = (field: keyof Client, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
+    setFormData((prev) => ({ ...prev, [field]: value }))
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
 
     try {
-      if (mode === "add") {
+      if (mode === 'add') {
         const newClient: Client = {
           id: crypto.randomUUID(),
-          name: formData.name || "",
-          email: formData.email || "",
+          name: formData.name || '',
+          email: formData.email || '',
           plan: formData.plan || Plan.FREE,
           status: formData.status || Status.PENDING,
-          created_at: new Date().getTime(),
-        };
+          created_at: new Date().getTime()
+        }
 
-        await addClient(newClient);
-        toast.success("Client added successfully!");
+        await addClient(newClient)
+        toast.success('Client added successfully!')
       } else if (initialClient) {
         await updateClient({
           ...initialClient,
-          ...formData,
-        });
-        toast.success("Client updated successfully!");
+          ...formData
+        })
+        toast.success('Client updated successfully!')
       }
 
-      onOpenChange(false);
+      onOpenChange(false)
 
-      if (mode === "add") {
+      if (mode === 'add') {
         setFormData({
-          name: "",
-          email: "",
+          name: '',
+          email: '',
           plan: Plan.FREE,
-          status: Status.PENDING,
-        });
+          status: Status.PENDING
+        })
       }
     } catch (error) {
-      console.error("Error processing client:", error);
-      toast.error("An error occurred while processing the client.");
+      console.error('Error processing client:', error)
+      toast.error('An error occurred while processing the client.')
     }
-  };
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>
-            {mode === "add" ? "Add Client" : "Edit Client"}
+            {mode === 'add' ? 'Add Client' : 'Edit Client'}
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4 pt-4">
@@ -76,8 +93,8 @@ export function ClientForm({ open, onOpenChange, mode, client: initialClient }: 
             <Label htmlFor="name">Name</Label>
             <Input
               id="name"
-              value={formData.name || ""}
-              onChange={(e) => handleChange("name", e.target.value)}
+              value={formData.name || ''}
+              onChange={(e) => handleChange('name', e.target.value)}
               required
             />
           </div>
@@ -86,8 +103,8 @@ export function ClientForm({ open, onOpenChange, mode, client: initialClient }: 
             <Input
               id="email"
               type="email"
-              value={formData.email || ""}
-              onChange={(e) => handleChange("email", e.target.value)}
+              value={formData.email || ''}
+              onChange={(e) => handleChange('email', e.target.value)}
               required
             />
           </div>
@@ -95,7 +112,7 @@ export function ClientForm({ open, onOpenChange, mode, client: initialClient }: 
             <Label htmlFor="plan">Plan</Label>
             <Select
               value={formData.plan}
-              onValueChange={(value) => handleChange("plan", value as Plan)}
+              onValueChange={(value) => handleChange('plan', value as Plan)}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select a plan" />
@@ -112,7 +129,7 @@ export function ClientForm({ open, onOpenChange, mode, client: initialClient }: 
             <Label htmlFor="status">Status</Label>
             <Select
               value={formData.status}
-              onValueChange={(value) => handleChange("status", value as Status)}
+              onValueChange={(value) => handleChange('status', value as Status)}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select a status" />
@@ -133,12 +150,10 @@ export function ClientForm({ open, onOpenChange, mode, client: initialClient }: 
             >
               Cancel
             </Button>
-            <Button type="submit">
-              {mode === "add" ? "Add" : "Save"}
-            </Button>
+            <Button type="submit">{mode === 'add' ? 'Add' : 'Save'}</Button>
           </div>
         </form>
       </DialogContent>
     </Dialog>
-  );
+  )
 }
