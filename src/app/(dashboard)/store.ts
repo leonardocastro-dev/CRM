@@ -16,7 +16,7 @@ interface DataStore {
   initPlansRealtime: () => void
 }
 
-export const useData = create<DataStore>((set, get) => ({
+export const useData = create<DataStore>((set) => ({
   clients: [],
   plans: [],
   loading: true,

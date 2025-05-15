@@ -21,7 +21,7 @@ const ClientsPage = () => {
             Client Management
           </h1>
           <p className="text-muted-foreground">
-            View and manage all your company's clients
+            View and manage all your company&apos;s clients
           </p>
         </div>
         {user && (

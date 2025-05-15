@@ -11,7 +11,7 @@ export const formatDate = (timestamp: number) => {
     return formatDistanceToNow(timestamp, {
       addSuffix: true
     })
-  } catch (e) {
+  } catch {
     return String(timestamp)
   }
 }

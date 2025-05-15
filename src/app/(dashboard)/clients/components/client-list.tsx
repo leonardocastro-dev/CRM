@@ -45,7 +45,7 @@ export function ClientList({ clients }: { clients: Client[] }) {
     <Card>
       <CardHeader>
         <CardTitle>Clients</CardTitle>
-        <CardDescription>Manage your company's clients</CardDescription>
+        <CardDescription>Manage your company&apos;s clients</CardDescription>
       </CardHeader>
       <CardContent>
         {clients.length === 0 ? (
